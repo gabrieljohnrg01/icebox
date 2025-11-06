@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Add Startup{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h4 class="mb-0"><i class="bi bi-rocket"></i> Add New Startup</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Startup Name *</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Industry</label>
+                            <input type="text" class="form-control" name="industry" placeholder="e.g., FinTech, HealthTech">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="4" 
+                                  placeholder="Brief description of the startup..."></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Stage</label>
+                            <select class="form-select" name="stage">
+                                <option value="ideation">Ideation</option>
+                                <option value="validation">Validation</option>
+                                <option value="development">Development</option>
+                                <option value="launch">Launch</option>
+                                <option value="growth">Growth</option>
+                                <option value="scale">Scale</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Logo (Optional)</label>
+                            <input type="file" class="form-control" name="logo" accept="image/*">
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning text-white">
+                            <i class="bi bi-check-circle"></i> Create Startup
+                        </button>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

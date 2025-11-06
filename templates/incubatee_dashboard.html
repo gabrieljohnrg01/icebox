@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Incubatee Dashboard{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="text-white"><i class="bi bi-person-workspace"></i> My Startups</h1>
+        <p class="text-white-50">Track your progress and submit updates</p>
+    </div>
+</div>
+
+{% if startups %}
+<div class="row g-4">
+    {% for startup in startups %}
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    {% if startup.logo %}
+                    <img src="{{ url_for('static', filename='uploads/' + startup.logo) }}" 
+                         class="startup-logo me-3" alt="Logo">
+                    {% else %}
+                    <div class="startup-logo me-3 bg-light d-flex align-items-center justify-content-center">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <h5 class="mb-0">{{ startup.name }}</h5>
+                        <small class="text-muted">{{ startup.industry or 'N/A' }}</small>
+                    </div>
+                </div>
+                
+                {% if startup.description %}
+                <p class="text-muted small">{{ startup.description[:100] }}...</p>
+                {% endif %}
+                
+                <div class="mb-3">
+                    <span class="badge bg-info">{{ startup.stage }}</span>
+                    <span class="badge bg-secondary">
+                        {{ startup.milestones|selectattr('status', 'equalto', 'completed')|list|length }}/{{ startup.milestones|length }} milestones
+                    </span>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('submit_progress', startup_id=startup.id) }}" 
+                       class="btn btn-primary">
+                        <i class="bi bi-file-earmark-plus"></i> Submit Progress
+                    </a>
+                    <a href="{{ url_for('view_startup_progress', startup_id=startup.id) }}" 
+                       class="btn btn-outline-primary">
+                        <i class="bi bi-eye"></i> View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                <h3 class="mt-3">No Startups Assigned</h3>
+                <p class="text-muted">You haven't been added to any startups yet. Contact an admin to get started.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

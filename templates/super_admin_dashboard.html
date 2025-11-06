@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Super Admin Dashboard{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="text-white"><i class="bi bi-shield-check"></i> Super Admin Dashboard</h1>
+        <p class="text-white-50">Manage admins and oversee all operations</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                <h3 class="mt-3">{{ admins|length }}</h3>
+                <p class="text-muted mb-0">Admins</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-person-badge text-success" style="font-size: 2rem;"></i>
+                <h3 class="mt-3">{{ incubatees|length }}</h3>
+                <p class="text-muted mb-0">Incubatees</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-rocket text-warning" style="font-size: 2rem;"></i>
+                <h3 class="mt-3">{{ startups|length }}</h3>
+                <p class="text-muted mb-0">Startups</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Admins</h5>
+            </div>
+            <div class="card-body">
+                {% if admins %}
+                <div class="list-group list-group-flush">
+                    {% for admin in admins %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">{{ admin.username }}</h6>
+                            <small class="text-muted">{{ admin.email }}</small>
+                        </div>
+                        <a href="{{ url_for('delete_user', user_id=admin.id) }}" 
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Delete this admin?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No admins yet</p>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{{ url_for('add_admin') }}" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-circle"></i> Add Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Incubatees</h5>
+            </div>
+            <div class="card-body">
+                {% if incubatees %}
+                <div class="list-group list-group-flush">
+                    {% for inc in incubatees %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">{{ inc.username }}</h6>
+                            <small class="text-muted">{{ inc.email }}</small>
+                        </div>
+                        <a href="{{ url_for('delete_user', user_id=inc.id) }}" 
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Delete this incubatee?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No incubatees yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h5 class="mb-0"><i class="bi bi-rocket"></i> All Startups</h5>
+            </div>
+            <div class="card-body">
+                {% if startups %}
+                <div class="row g-3">
+                    {% for startup in startups %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    {% if startup.logo %}
+                                    <img src="{{ url_for('static', filename='uploads/' + startup.logo) }}" 
+                                         class="startup-logo me-3" alt="Logo">
+                                    {% else %}
+                                    <div class="startup-logo me-3 bg-light d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-building"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-0">{{ startup.name }}</h6>
+                                        <small class="text-muted">{{ startup.industry }}</small>
+                                    </div>
+                                </div>
+                                <span class="badge bg-info">{{ startup.stage }}</span>
+                                <span class="badge bg-secondary">{{ startup.members|length }} members</span>
+                                <div class="mt-2">
+                                    <a href="{{ url_for('view_startup_progress', startup_id=startup.id) }}" 
+                                       class="btn btn-sm btn-primary">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center">No startups yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

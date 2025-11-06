@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% block title %}{{ startup.name }} - Progress{% endblock %}
+{% block content %}
+<div class="row mb-3 mb-md-4">
+    <div class="col">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">
+            <i class="bi bi-arrow-left"></i> <span class="d-none d-sm-inline">Back</span>
+        </a>
+    </div>
+</div>
+
+<!-- Startup Header -->
+<div class="card mb-3 mb-md-4">
+    <div class="card-body p-3 p-md-4">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+                <div class="d-flex align-items-start flex-column flex-sm-row">
+                    {% if startup.logo %}
+                    <img src="{{ url_for('static', filename='uploads/' + startup.logo) }}" 
+                         class="me-0 me-sm-3 mb-3 mb-sm-0" 
+                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 15px;" 
+                         alt="{{ startup.name }} logo"
+                         loading="lazy">
+                    {% else %}
+                    <div class="me-0 me-sm-3 mb-3 mb-sm-0 bg-light d-flex align-items-center justify-content-center" 
+                         style="width: 80px; height: 80px; border-radius: 15px; flex-shrink: 0;">
+                        <i class="bi bi-building" style="font-size: 2rem;" aria-hidden="true"></i>
+                    </div>
+                    {% endif %}
+                    <div class="w-100">
+                        <h2 class="mb-1 h3 h2-md">{{ startup.name }}</h2>
+                        <p class="text-muted mb-2">{{ startup.industry or 'N/A' }}</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-info">{{ startup.stage }}</span>
+                            <span class="badge bg-secondary">{{ startup.members|length }} team members</span>
+                        </div>
+                    </div>
+                </div>
+                {% if startup.description %}
+                <p class="mt-3 mb-0 small">{{ startup.description }}</p>
+                {% endif %}
+            </div>
+            <div class="col-12 col-lg-4 text-start text-lg-end">
+                <div class="d-grid gap-2 d-lg-block">
+                    {% if session.role == 'incubatee' %}
+                    <a href="{{ url_for('submit_progress', startup_id=startup.id) }}" 
+                       class="btn btn-primary btn-lg">
+                        <i class="bi bi-file-earmark-plus"></i> Submit Progress
+                    </a>
+                    {% endif %}
+                    {% if session.role in ['super_admin', 'admin'] %}
+                    <a href="{{ url_for('edit_startup', startup_id=startup.id) }}" 
+                       class="btn btn-warning btn-lg">
+                        <i class="bi bi-pencil"></i> Edit Startup
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 g-md-4">
+    <!-- Milestones -->
+    <div class="col-12 col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-flag"></i> Milestones Progress</h5>
+            </div>
+            <div class="card-body p-3 p-md-4">
+                {% if milestones %}
+                    {% set completed = milestones|selectattr('status', 'equalto', 'completed')|list|length %}
+                    {% set total = milestones|length %}
+                    {% set percentage = (completed / total * 100)|int %}
+                    
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold small">Overall Progress</span>
+                            <span class="fw-bold text-success small">{{ completed }}/{{ total }} ({{ percentage }}%)</span>
+                        </div>
+                        <div class="progress" style="height: 25px;">
+                            {% set progress_width = percentage ~ '%' %}
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: {{ progress_width }}"
+                                 aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                <span class="small">{{ percentage }}%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group by category -->
+                    {% set categories = ['product', 'funding', 'team', 'marketing', 'other'] %}
+                    {% for category in categories %}
+                        {% set cat_milestones = milestones|selectattr('category', 'equalto', category)|list %}
+                        {% if cat_milestones %}
+                        <h6 class="text-capitalize mt-4 mb-3">
+                            <i class="bi bi-dot"></i> {{ category }} Milestones
+                        </h6>
+                        <div class="list-group mb-3">
+                            {% for milestone in cat_milestones %}
+                            <div class="list-group-item {% if milestone.status == 'completed' %}bg-light{% endif %} p-2 p-md-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="me-2 flex-shrink-0">
+                                        {% if milestone.status == 'completed' %}
+                                        <i class="bi bi-check-circle-fill text-success" style="font-size: 1.2rem;" aria-label="Completed"></i>
+                                        {% else %}
+                                        <i class="bi bi-circle text-muted" style="font-size: 1.2rem;" aria-label="Pending"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <h6 class="mb-1 small {% if milestone.status == 'completed' %}text-decoration-line-through text-muted{% endif %}">
+                                            {{ milestone.title }}
+                                        </h6>
+                                        {% if milestone.description %}
+                                        <p class="mb-1 small text-muted text-truncate">{{ milestone.description }}</p>
+                                        {% endif %}
+                                        <div class="d-flex flex-wrap gap-1">
+                                            {% if milestone.achieved_before_incubation %}
+                                            <span class="badge bg-info" style="font-size: 0.7rem;">Pre-incubation</span>
+                                            {% endif %}
+                                            {% if milestone.due_date %}
+                                            <span class="badge bg-secondary" style="font-size: 0.7rem;">
+                                                <i class="bi bi-calendar"></i> {{ milestone.due_date.strftime('%b %d, %Y') }}
+                                            </span>
+                                            {% endif %}
+                                            {% if milestone.status == 'completed' and milestone.completed_at %}
+                                            <span class="badge bg-success" style="font-size: 0.7rem;">
+                                                Completed {{ milestone.completed_at.strftime('%b %d, %Y') }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <div class="text-center py-4 py-md-5">
+                    <i class="bi bi-flag" style="font-size: 3rem; color: #ddd;" aria-hidden="true"></i>
+                    <p class="text-muted mt-3 mb-0">No milestones set yet</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Reports -->
+    <div class="col-12 col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-file-earmark-text"></i> Progress Reports</h5>
+            </div>
+            <div class="card-body p-3 p-md-4" style="max-height: 800px; overflow-y: auto;">
+                {% if reports %}
+                <div class="list-group list-group-flush">
+                    {% for report in reports %}
+                    <div class="list-group-item px-0 py-3">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-2 gap-2">
+                            <h6 class="mb-0 small">{{ report.title }}</h6>
+                            <span class="badge bg-primary flex-shrink-0" style="font-size: 0.75rem;">
+                                {{ report.submitted_at.strftime('%b %d, %Y') }}
+                            </span>
+                        </div>
+                        <p class="mb-2 small">{{ report.description }}</p>
+                        
+                        {% if report.achievements %}
+                        <div class="mb-2">
+                            <strong class="small text-success">
+                                <i class="bi bi-trophy"></i> Achievements:
+                            </strong>
+                            <p class="small mb-0 ms-3">{{ report.achievements }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if report.challenges %}
+                        <div class="mb-2">
+                            <strong class="small text-warning">
+                                <i class="bi bi-exclamation-triangle"></i> Challenges:
+                            </strong>
+                            <p class="small mb-0 ms-3">{{ report.challenges }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if report.next_steps %}
+                        <div class="mb-2">
+                            <strong class="small text-info">
+                                <i class="bi bi-arrow-right-circle"></i> Next Steps:
+                            </strong>
+                            <p class="small mb-0 ms-3">{{ report.next_steps }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-person"></i> Submitted by {{ report.submitted_by_user.username }}
+                        </small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4 py-md-5">
+                    <i class="bi bi-inbox" style="font-size: 3rem; color: #ddd;" aria-hidden="true"></i>
+                    <p class="text-muted mt-3">No progress reports yet</p>
+                    {% if session.role == 'incubatee' %}
+                    <a href="{{ url_for('submit_progress', startup_id=startup.id) }}" 
+                       class="btn btn-primary btn-sm mt-2">
+                        Submit First Report
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Team Members Section -->
+<div class="row mt-3 mt-md-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Team Members</h5>
+            </div>
+            <div class="card-body p-3 p-md-4">
+                {% if startup.members %}
+                <div class="row g-3">
+                    {% for member in startup.members %}
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center p-3">
+                                <i class="bi bi-person-circle" style="font-size: 2.5rem; color: #6c757d;" aria-hidden="true"></i>
+                                <h6 class="mt-2 mb-0 small">{{ member.user.username }}</h6>
+                                <small class="text-muted d-block">{{ member.role or 'Member' }}</small>
+                                <small class="text-muted d-block text-truncate" title="{{ member.user.email }}">
+                                    {{ member.user.email }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center mb-0">No team members assigned yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
