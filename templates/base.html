@@ -8,6 +8,8 @@
     <title>{% block title %}Incubator System{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+
     <style>
         :root {
             --primary-color: #4f46e5;
@@ -174,6 +176,298 @@
                 padding: 1rem;
             }
         }
+        #vertical-line{
+            width: 600px;
+            height: 1px;
+            border: 0.5px solid;
+        }
+        
+        .crd
+        {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 165px;
+        }
+
+        /* Milestone */
+        .milestone-line
+        {
+            width: 555px;
+        }
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .progress-tracker-vertical
+        {
+            display: flex;
+            justify-content: space-between;
+            height: 100%;
+            align-items: center;
+            max-width: 600px;
+            margin: 2%;
+            position: relative;
+            flex-direction: column;
+            padding: 4%;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #ddd;
+            z-index: 0;
+        }
+        .progress-line-vertical
+        {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            bottom: 45px;
+            width: 4px;
+            background-color: #ddd;
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .step-icon.in-progress {
+            background-color: #ffc107;
+        }
+
+        .step-icon.completed {
+            background-color: #28a745;
+        }
+
+        .step-icon.not-yet {
+            background-color: #dc3545;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+        .circle-bt{
+            background: white;
+            border: 1px solid black;
+        }
+        .bi-plus-circle{
+            color: black;
+        }
+        .container-md
+        {
+            width: 100%;
+            height: 500px;
+            background: transparent;
+            border: 1px solid;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+        }
+        .edit-deliverable
+        {
+            margin-top: 20px;
+            width: 75%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: snow;
+            border: 1px solid;
+            border-radius: 70px;
+        }
+        .card-deliverable
+        {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+        }
+        .deliverable-form
+        {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1px;
+            padding: 30px;
+        }
+        .container-deliverable
+        {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .close-btn
+        {
+            position: relative;
+            left: 50%;
+            z-index: 0;
+            bottom: 25px;
+        }
+        .main-container-deliverable
+        {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button 
+        {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        /* Readiness Level Selection */
+        .check-container
+        {
+            width: 40%;
+        }
+        #checked-container
+        {
+            width: 30%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px;
+        }
+        #selects
+        {
+            width: 90%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-around;
+
+        }
+        #selects div
+        {
+            margin: 10px;
+        }
+
+        .form-deliverable-container
+        {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: auto;
+        }
+        .temp-file-container
+        {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+        .form-temp-file
+        {
+            width: 50%;
+            background: snow;
+            border: 1px solid;
+            border-radius: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            height: auto;
+            padding: 20px;
+        }
+        .temp-file-container .form-temp-file .mb-3
+        {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .view-deliverable-container
+        {
+            margin-top: 20px;
+            width: 75%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: snow;
+            border: 1px solid;
+            border-radius: 70px;
+        }
+        .view-box
+        {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            height: auto;
+            border: 2px solid;
+            margin: 10px;
+            padding: 20px;
+        }
+        .step-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+        .close-view-btn
+        {
+            position: relative;
+            left: 50%;
+            bottom: 30px;
+        }
+        .deliverable
+        {            
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        .de-margin
+        {
+            margin: 20px;
+        }
+        .level-select
+        {
+            width: 50%;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            align-items: center;
+        }
+        .hide
+        {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -200,15 +494,17 @@
                         </a>
                     </li>
                     {% endif %}
+                    {% if session.role == 'super_admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('add_tempfile') }}">
+                            <i class="bi bi-file-earmark-fill"></i> Add Temporary File
+                        </a>
+                    </li>
+                    {% endif %}
                     {% if session.role in ['super_admin', 'admin'] %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('add_startup') }}">
                             <i class="bi bi-plus-circle"></i> Add Startup
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register_incubatee') }}">
-                            <i class="bi bi-person-badge"></i> Register Incubatee
                         </a>
                     </li>
                     {% endif %}
@@ -218,11 +514,15 @@
                             <span class="badge bg-primary badge-role">{{ session.role.replace('_', ' ').title() }}</span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('settings') }}">
+                                <i class="bi bi-gear"></i> Settings
+                            </a></li>
                             <li><a class="dropdown-item" href="{{ url_for('logout') }}">
                                 <i class="bi bi-box-arrow-right"></i> Logout
                             </a></li>
                         </ul>
                     </li>
+                    
                 </ul>
             </div>
         </div>
@@ -279,6 +579,79 @@
                 }
             });
         });
+
+        // Edit Deliverable Toggle
+        const openbtn = document.querySelectorAll(".step");
+        const closebtn = document.getElementById("closebtn");
+
+        const stepContainer = document.getElementById("step-icon-opncls");
+        const editDeliverable = document.getElementById("Edit-Dcontainer");
+        const deliverableInput = document.getElementById("deliverableInput");
+
+        const openbtnview = document.querySelectorAll(".step-view");
+        const viewDeliverable = document.getElementById("view-deliverable-container");
+
+
+
+        // edit deliverable
+        openbtn.forEach(btn => {
+            btn.addEventListener("click", () => {
+                deliverableInput.value = btn.getAttribute("data-value");
+                stepContainer.classList.add("hide");
+                editDeliverable.classList.remove("hide");
+            });
+        });        
+        
+
+
+        // view deliverable
+        openbtnview.forEach(btn => {
+            btn.addEventListener("click", () => {
+                deliverableInput.value = btn.getAttribute("data-value");
+                stepContainer.classList.add("hide");
+                viewDeliverable.classList.remove("hide");
+            });
+        });
+
+        closebtn.addEventListener("click", () => {
+            stepContainer.classList.remove("hide");
+            editDeliverable.classList.add("hide");
+            viewDeliverable.classList.add("hide");
+
+        });
+
+
+
+        const openviewbtn = document.querySelectorAll(".step-view");
+        
+        // Readiness Level Selection
+
+    /*    const checkboxes = document.getElementById('checked-container');
+        const template = document.getElementById('level-select');
+        const selectsDiv = document.getElementById('selects');
+
+        checkboxes.addEventListener('change', () => {
+            selectsDiv.innerHTML = '';
+
+            const checked = checkboxes.querySelectorAll('input[type="checkbox"]:checked');
+            checked.forEach(cb => {
+                // Clone the template
+                const clone = template.cloneNode(true);
+                clone.style.display = 'block';
+                clone.id = ''; // Remove id to avoid duplicates
+
+                // Check value of checkbox to set name attribute
+                const label = document.createElement('span');
+                label.textContent = cb.value + ': ';
+
+                const wrapper = document.createElement('div');
+                wrapper.appendChild(label);
+                wrapper.appendChild(clone);
+
+                selectsDiv.appendChild(wrapper);
+                
+            });
+        }); */
     </script>
 </body>
 </html>

@@ -31,24 +31,10 @@
                         <input type="text" class="form-control" name="name" value="{{ startup.name }}" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Industry</label>
-                        <input type="text" class="form-control" name="industry" value="{{ startup.industry or '' }}">
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea class="form-control" name="description" rows="4">{{ startup.description or '' }}</textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Stage</label>
-                        <select class="form-select" name="stage">
-                            <option value="ideation" {% if startup.stage == 'ideation' %}selected{% endif %}>Ideation</option>
-                            <option value="validation" {% if startup.stage == 'validation' %}selected{% endif %}>Validation</option>
-                            <option value="development" {% if startup.stage == 'development' %}selected{% endif %}>Development</option>
-                            <option value="launch" {% if startup.stage == 'launch' %}selected{% endif %}>Launch</option>
-                            <option value="growth" {% if startup.stage == 'growth' %}selected{% endif %}>Growth</option>
-                            <option value="scale" {% if startup.stage == 'scale' %}selected{% endif %}>Scale</option>
-                        </select>
-                    </div>
+                    
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="bi bi-save"></i> Update Details
                     </button>
@@ -110,69 +96,39 @@
             <div class="card-header bg-warning text-white">
                 <h5 class="mb-0"><i class="bi bi-flag"></i> Milestones</h5>
             </div>
-            <div class="card-body">
-                {% if milestones %}
-                <div class="list-group mb-3">
-                    {% for milestone in milestones %}
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1">
-                                    {{ milestone.title }}
-                                    {% if milestone.achieved_before_incubation %}
-                                    <span class="badge bg-info">Pre-incubation</span>
-                                    {% endif %}
-                                    {% if milestone.status == 'completed' %}
-                                    <i class="bi bi-check-circle-fill text-success"></i>
-                                    {% endif %}
-                                </h6>
-                                <small class="text-muted">{{ milestone.description or 'No description' }}</small>
-                                <br>
-                                <span class="badge bg-secondary">{{ milestone.category }}</span>
+            <div class="card-body crd">
+                <div class="milestone-line">
+                    <div class="progress-tracker">
+                        <div class="progress-line"></div>
+                    
+                        {% for i in range(1, 5) %}
+                        <div class="step">
+                            {% if milestonesGroup.get(i) == 'completed' %}
+                            <div class="step-icon completed">
+                                <a class="nav-link" href="{{ url_for('view_milestone', startup_id=startup.id, index=i) }}">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </a>
                             </div>
-                            <a href="{{ url_for('delete_milestone', milestone_id=milestone.id) }}" 
-                               class="btn btn-sm btn-danger"
-                               onclick="return confirm('Delete this milestone?')">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            {% elif milestonesGroup.get(i) == 'pending' %}
+                            <div class="step-icon in-progress">
+                                <a class="nav-link" href="{{ url_for('view_milestone', startup_id=startup.id, index=i) }}">
+                                    <i class="bi bi-hourglass-split"></i>
+                                </a>
+                            </div>
+                            {% else %}
+                            <div class="step-icon not-yet">
+                                <a class="nav-link" href="{{ url_for('view_milestone', startup_id=startup.id, index=i) }}">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                            <div class="step-label">Milestone {{ i }}</div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
-                {% else %}
-                <p class="text-muted text-center">No milestones yet</p>
-                {% endif %}
                 
                 <form method="POST" action="{{ url_for('add_milestone', startup_id=startup.id) }}">
-                    <h6 class="mb-2">Add Milestone</h6>
-                    <div class="mb-2">
-                        <input type="text" class="form-control form-control-sm" name="title" 
-                               placeholder="Milestone title" required>
-                    </div>
-                    <div class="mb-2">
-                        <textarea class="form-control form-control-sm" name="description" rows="2"
-                                  placeholder="Description (optional)"></textarea>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-6">
-                            <select class="form-select form-select-sm" name="category">
-                                <option value="product">Product</option>
-                                <option value="funding">Funding</option>
-                                <option value="team">Team</option>
-                                <option value="marketing">Marketing</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <input type="date" class="form-control form-control-sm" name="due_date">
-                        </div>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" name="achieved_before" id="achievedBefore">
-                        <label class="form-check-label" for="achievedBefore">
-                            Achieved before incubation
-                        </label>
-                    </div>
                     <button type="submit" class="btn btn-warning text-white btn-sm w-100">
                         <i class="bi bi-plus-circle"></i> Add Milestone
                     </button>

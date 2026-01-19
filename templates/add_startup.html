@@ -9,14 +9,14 @@
             </div>
             <div class="card-body">
                 <form method="POST" enctype="multipart/form-data">
-                    <div class="row">
+                    <div class="row g-3">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Startup Name *</label>
                             <input type="text" class="form-control" name="name" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Industry</label>
-                            <input type="text" class="form-control" name="industry" placeholder="e.g., FinTech, HealthTech">
+                            <label class="form-label">Email *</label>
+                            <input type="text" class="form-control" name="email" required>
                         </div>
                     </div>
                     
@@ -26,21 +26,14 @@
                                   placeholder="Brief description of the startup..."></textarea>
                     </div>
                     
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Stage</label>
-                            <select class="form-select" name="stage">
-                                <option value="ideation">Ideation</option>
-                                <option value="validation">Validation</option>
-                                <option value="development">Development</option>
-                                <option value="launch">Launch</option>
-                                <option value="growth">Growth</option>
-                                <option value="scale">Scale</option>
-                            </select>
-                        </div>
+                    <div class="row g-3">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Logo (Optional)</label>
                             <input type="file" class="form-control" name="logo" accept="image/*">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Contact Number</label>
+                            <input type="number" class="form-control" name="contactnumber" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                         </div>
                     </div>
                     

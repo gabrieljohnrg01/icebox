@@ -9,24 +9,39 @@
             </div>
             <div class="card-body">
                 <form method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" required>
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" name="firstname" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" name="username" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" required>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success">
-                            <i class="bi bi-check-circle"></i> Register Incubatee
-                        </button>
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Number</label>
+                            <input type="number" class="form-control" name="contactnumber" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <input type="text" class="form-control" name="role"
+                               placeholder="Role (e.g., CEO, CTO)">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Register Incubatee
+                            </button>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
                 </form>
             </div>
         </div>

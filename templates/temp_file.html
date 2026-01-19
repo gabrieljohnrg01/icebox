@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Add Temporary File{% endblock %}
+{% block content %}
+<div class="temp-file-container">
+    <form action="{{ url_for('add_tempfile') }}" method="post" enctype="multipart/form-data" class="form-temp-file">
+        <div class="mb-3">
+            <label for="tempFile" class="form-label">Select Temporary File to Upload</label>
+            <input class="form-control" type="file" id="tempFile" name="temp_file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload Temporary File</button>
+    </form>
+</div>
+{% endblock %}
